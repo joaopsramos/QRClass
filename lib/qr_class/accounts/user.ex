@@ -11,7 +11,7 @@ defmodule QRClass.Accounts.User do
     field(:hashed_password, :string, redact: true)
     field(:confirmed_at, :naive_datetime)
 
-    field(:type, Ecto.Enum, values: [:teacher, :student], default: :student)
+    field(:type, Ecto.Enum, values: [:teacher, :student])
 
     timestamps()
   end

@@ -5,24 +5,24 @@ defmodule QRClassWeb.UserLoginLive do
     ~H"""
     <div class="mx-auto max-w-sm">
       <.header class="text-center">
-        Sign in to account
+        Fazer Sign in
         <:subtitle>
-          Don't have an account?
+          Não tem uma conta?
           <.link navigate={~p"/users/register"} class="font-semibold text-brand hover:underline">
-            Sign up
+            Clique aqui
           </.link>
-          for an account now.
+          para criar uma.
         </:subtitle>
       </.header>
 
       <.simple_form for={@form} id="login_form" action={~p"/users/log_in"} phx-update="ignore">
         <.input field={@form[:email]} type="email" label="Email" required />
-        <.input field={@form[:password]} type="password" label="Password" required />
+        <.input field={@form[:password]} type="password" label="Senha" required />
 
         <:actions>
-          <.input field={@form[:remember_me]} type="checkbox" label="Keep me logged in" />
+          <.input field={@form[:remember_me]} type="checkbox" label="Continuar conectado" />
           <.link href={~p"/users/reset_password"} class="text-sm font-semibold">
-            Forgot your password?
+            Esqueceu sua senha?
           </.link>
         </:actions>
         <:actions>

@@ -15,6 +15,12 @@
     <ul class="relative z-10 flex items-center gap-4 px-4 sm:px-6 lg:px-8 justify-end">
       <%= if @current_user do %>
         <li class="text-[0.8125rem] leading-6 text-zinc-900">
+          <%= case @current_user.type do
+            :student -> "Aluno"
+            :teacher -> "Professor"
+          end %>
+        </li>
+        <li class="text-[0.8125rem] leading-6 text-zinc-900">
           <%= @current_user.email %>
         </li>
         <li>
@@ -22,7 +28,7 @@
             href={~p"/users/settings"}
             class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
           >
-            Settings
+            Configurações
           </.link>
         </li>
         <li>
@@ -31,7 +37,7 @@
             method="delete"
             class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
           >
-            Log out
+            Sair
           </.link>
         </li>
       <% else %>
@@ -40,7 +46,7 @@
             href={~p"/users/register"}
             class="text-[0.8125rem] leading-6 text-zinc-900 font-semibold hover:text-zinc-700"
           >
-            Register
+            Criar conta
           </.link>
         </li>
         <li>
