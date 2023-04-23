@@ -31,6 +31,41 @@ defmodule QRClassWeb.UserRegistrationLive do
           Oops, something went wrong! Please check the errors below.
         </.error>
 
+        <div class="flex">
+          <label
+            id="student-label"
+            class={"py-2 flex-auto border rounded-l-full text-right hover:text-brand #{@selected_user_type_class}"}
+            phx-click={
+              JS.add_class(@selected_user_type_class)
+              |> JS.remove_class(@selected_user_type_class, to: "#teacher-label")
+            }
+          >
+            <span class="pr-4">Student</span>
+            <input
+              type="checkbox"
+              name={@form[:type].name}
+              id={@form[:type].id <> "student"}
+              value={Accounts.student()}
+            />
+          </label>
+          <label
+            id="teacher-label"
+            class="py-2 flex-auto border rounded-r-full hover:text-brand"
+            phx-click={
+              JS.add_class(@selected_user_type_class)
+              |> JS.remove_class(@selected_user_type_class, to: "#student-label")
+            }
+          >
+            <span class="pl-4">Teacher</span>
+            <input
+              type="checkbox"
+              name={@form[:type].name}
+              id={@form[:type].id <> "teacher"}
+              value={Accounts.teacher()}
+            />
+          </label>
+        </div>
+
         <.input field={@form[:email]} type="email" label="Email" required />
         <.input field={@form[:password]} type="password" label="Password" required />
 
@@ -47,27 +82,35 @@ defmodule QRClassWeb.UserRegistrationLive do
 
     socket =
       socket
-      |> assign(trigger_submit: false, check_errors: false)
+      |> assign(
+        trigger_submit: false,
+        check_errors: false,
+        selected_user_type_class: "text-white bg-black hover:text-white",
+        unselected_user_type_class: "text-black bg-white hover:text-brand"
+      )
       |> assign_form(changeset)
 
     {:ok, socket, temporary_assigns: [form: nil]}
   end
 
   def handle_event("save", %{"user" => user_params}, socket) do
-    case Accounts.register_user(user_params) do
-      {:ok, user} ->
-        {:ok, _} =
-          Accounts.deliver_user_confirmation_instructions(
-            user,
-            &url(~p"/users/confirm/#{&1}")
-          )
+    user_params |> IO.inspect()
+    {:noreply, socket}
 
-        changeset = Accounts.change_user_registration(user)
-        {:noreply, socket |> assign(trigger_submit: true) |> assign_form(changeset)}
-
-      {:error, %Ecto.Changeset{} = changeset} ->
-        {:noreply, socket |> assign(check_errors: true) |> assign_form(changeset)}
-    end
+    # case Accounts.register_user(user_params) do
+    #   {:ok, user} ->
+    #     {:ok, _} =
+    #       Accounts.deliver_user_confirmation_instructions(
+    #         user,
+    #         &url(~p"/users/confirm/#{&1}")
+    #       )
+    #
+    #     changeset = Accounts.change_user_registration(user)
+    #     {:noreply, socket |> assign(trigger_submit: true) |> assign_form(changeset)}
+    #
+    #   {:error, %Ecto.Changeset{} = changeset} ->
+    #     {:noreply, socket |> assign(check_errors: true) |> assign_form(changeset)}
+    # end
   end
 
   def handle_event("validate", %{"user" => user_params}, socket) do

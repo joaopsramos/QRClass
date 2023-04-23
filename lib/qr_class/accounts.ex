@@ -8,6 +8,9 @@ defmodule QRClass.Accounts do
 
   alias QRClass.Accounts.{User, UserToken, UserNotifier}
 
+  def teacher, do: :teacher
+  def student, do: :student
+
   ## Database getters
 
   @doc """

@@ -1,13 +1,17 @@
 defmodule QRClass.Accounts.User do
   use Ecto.Schema
+
   import Ecto.Changeset
+
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "users" do
-    field :email, :string
-    field :password, :string, virtual: true, redact: true
-    field :hashed_password, :string, redact: true
-    field :confirmed_at, :naive_datetime
+    field(:email, :string)
+    field(:password, :string, virtual: true, redact: true)
+    field(:hashed_password, :string, redact: true)
+    field(:confirmed_at, :naive_datetime)
+
+    field(:type, Ecto.Enum, values: [:teacher, :student], default: :student)
 
     timestamps()
   end
@@ -37,7 +41,7 @@ defmodule QRClass.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:email, :password, :type])
     |> validate_email(opts)
     |> validate_password(opts)
   end
