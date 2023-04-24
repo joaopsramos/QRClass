@@ -3,6 +3,9 @@ defmodule QRClassWeb.Router do
 
   import QRClassWeb.UserAuth
 
+  @ensure_authenticated {QRClassWeb.UserAuth, :ensure_authenticated}
+  @redirect_if_authenticated {QRClassWeb.UserAuth, :redirect_if_user_is_authenticated}
+
   pipeline :browser do
     plug(:accepts, ["html"])
     plug(:fetch_session)
@@ -17,13 +20,21 @@ defmodule QRClassWeb.Router do
     plug(:accepts, ["json"])
   end
 
+  scope "/", QRClassWeb do
+    pipe_through([:browser, :require_authenticated_user])
+
+    live_session :require_authenticated_user, on_mount: [@ensure_authenticated] do
+      live("/users/settings", UserSettingsLive, :edit)
+      live("/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email)
+    end
+  end
+
   ## Authentication routes
 
   scope "/", QRClassWeb do
     pipe_through([:browser, :redirect_if_user_is_authenticated])
 
-    live_session :redirect_if_user_is_authenticated,
-      on_mount: [{QRClassWeb.UserAuth, :redirect_if_user_is_authenticated}] do
+    live_session :redirect_if_user_is_authenticated, on_mount: [@redirect_if_authenticated] do
       live("/users/register", UserRegistrationLive, :new)
       live("/users/log_in", UserLoginLive, :new)
       live("/users/reset_password", UserForgotPasswordLive, :new)
@@ -31,18 +42,6 @@ defmodule QRClassWeb.Router do
     end
 
     post("/users/log_in", UserSessionController, :create)
-  end
-
-  scope "/", QRClassWeb do
-    pipe_through([:browser, :require_authenticated_user])
-
-    get("/", PageController, :home)
-
-    live_session :require_authenticated_user,
-      on_mount: [{QRClassWeb.UserAuth, :ensure_authenticated}] do
-      live("/users/settings", UserSettingsLive, :edit)
-      live("/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email)
-    end
   end
 
   scope "/", QRClassWeb do

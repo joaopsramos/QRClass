@@ -33,7 +33,7 @@ defmodule QRClassWeb.UserAuth do
     |> renew_session()
     |> put_token_in_session(token)
     |> maybe_write_remember_me_cookie(token, params)
-    |> redirect(to: user_return_to || signed_in_path(conn))
+    |> redirect(to: user_return_to || signed_in_path(conn, user))
   end
 
   defp maybe_write_remember_me_cookie(conn, token, %{"remember_me" => "true"}) do
@@ -165,8 +165,8 @@ defmodule QRClassWeb.UserAuth do
   def on_mount(:redirect_if_user_is_authenticated, _params, session, socket) do
     socket = mount_current_user(session, socket)
 
-    if socket.assigns.current_user do
-      {:halt, Phoenix.LiveView.redirect(socket, to: signed_in_path(socket))}
+    if user = socket.assigns.current_user do
+      {:halt, Phoenix.LiveView.redirect(socket, to: signed_in_path(socket, user))}
     else
       {:cont, socket}
     end
@@ -184,9 +184,9 @@ defmodule QRClassWeb.UserAuth do
   Used for routes that require the user to not be authenticated.
   """
   def redirect_if_user_is_authenticated(conn, _opts) do
-    if conn.assigns[:current_user] do
+    if user = conn.assigns[:current_user] do
       conn
-      |> redirect(to: signed_in_path(conn))
+      |> redirect(to: signed_in_path(conn, user))
       |> halt()
     else
       conn
@@ -223,5 +223,10 @@ defmodule QRClassWeb.UserAuth do
 
   defp maybe_store_return_to(conn), do: conn
 
-  defp signed_in_path(_conn), do: ~p"/"
+  defp signed_in_path(_conn, user) do
+    case user.type do
+      unquote(Accounts.teacher()) -> ~p"/teacher"
+      unquote(Accounts.student()) -> ~p"/student"
+    end
+  end
 end
