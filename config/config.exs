@@ -21,6 +21,10 @@ config :qr_class, QRClassWeb.Endpoint,
   pubsub_server: QRClass.PubSub,
   live_view: [signing_salt: "HZWvFnH0"]
 
+config :qr_class, :generators,
+  migration: true,
+  binary_id: true
+
 # Configures the mailer
 #
 # By default it uses the "Local" adapter which stores the emails
