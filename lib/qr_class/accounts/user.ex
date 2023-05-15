@@ -3,15 +3,20 @@ defmodule QRClass.Accounts.User do
 
   import Ecto.Changeset
 
+  alias QRClass.Course.Class
+
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "users" do
-    field(:email, :string)
-    field(:password, :string, virtual: true, redact: true)
-    field(:hashed_password, :string, redact: true)
-    field(:confirmed_at, :naive_datetime)
+    field :email, :string
+    field :password, :string, virtual: true, redact: true
+    field :hashed_password, :string, redact: true
+    field :confirmed_at, :naive_datetime
 
-    field(:type, Ecto.Enum, values: [:teacher, :student])
+    field :type, Ecto.Enum, values: [:teacher, :student]
+
+    has_many :classes_as_teacher, Class, foreign_key: :teacher_id
+    many_to_many :classes_as_student, Class, join_through: "student_classes"
 
     timestamps()
   end

@@ -45,9 +45,9 @@ defmodule QRClassWeb.UserRegistrationLive do
               type="radio"
               name={@form[:type].name}
               id={@form[:type].id <> "student"}
-              value={Accounts.student()}
+              value={User.student()}
               class="hidden"
-              checked={(@form[:type].value || Accounts.student()) == Accounts.student()}
+              checked={(@form[:type].value || User.student()) == User.student()}
             />
           </label>
           <label
@@ -63,9 +63,9 @@ defmodule QRClassWeb.UserRegistrationLive do
               type="radio"
               name={@form[:type].name}
               id={@form[:type].id <> "teacher"}
-              value={Accounts.teacher()}
+              value={User.teacher()}
               class="hidden"
-              checked={@form[:type].value == Accounts.teacher()}
+              checked={@form[:type].value == User.teacher()}
             />
           </label>
         </div>

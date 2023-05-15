@@ -25,12 +25,15 @@ defmodule QRClassWeb.Router do
 
     post "/classes", ClassController, :create
     get "/teachers", TeacherController, :index
+    get "/students", StudentController, :index
   end
 
   scope "/", QRClassWeb do
     pipe_through([:browser, :require_authenticated_user])
 
     get "/", PageController, :home
+    get "/teacher", PageController, :home
+    get "/student", PageController, :home
 
     live_session :require_authenticated_user, on_mount: [@ensure_authenticated] do
       live("/classes", ClassLive.Index, :index)

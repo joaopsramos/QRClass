@@ -9,9 +9,18 @@ defmodule QRClass.Accounts do
   alias QRClass.Accounts.{User, UserToken, UserNotifier}
 
   @teacher User.teacher()
+  @student User.student()
+
+  def list_students do
+    Repo.all(from u in User, where: u.type == @student)
+  end
 
   def list_teachers do
-    Repo.all( from u in User, where: u.type == @teacher)
+    Repo.all(from u in User, where: u.type == @teacher)
+  end
+
+  def get_users_by_ids(ids) do
+    Repo.all(from u in User, where: u.id in ^ids)
   end
 
   @doc """

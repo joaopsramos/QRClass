@@ -5,7 +5,7 @@ defmodule QRClassWeb.TeacherJSON do
     %{teachers: Enum.map(teachers, &data/1)}
   end
 
-  defp data(%User{} = teacher) do
+  def data(%User{} = teacher) do
     %{
       id: teacher.id,
       email: teacher.email

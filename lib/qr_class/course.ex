@@ -50,9 +50,14 @@ defmodule QRClass.Course do
 
   """
   def create_class(attrs \\ %{}) do
-    %Class{}
-    |> Class.changeset(attrs)
-    |> Repo.insert()
+    result =
+      %Class{}
+      |> Class.changeset(attrs)
+      |> Repo.insert()
+
+    with {:ok, class} <- result do
+      {:ok, Repo.preload(class, [:teacher, :students])}
+    end
   end
 
   @doc """
