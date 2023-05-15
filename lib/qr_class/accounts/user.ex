@@ -158,4 +158,7 @@ defmodule QRClass.Accounts.User do
       add_error(changeset, :current_password, "is not valid")
     end
   end
+
+  def teacher, do: :teacher
+  def student, do: :student
 end

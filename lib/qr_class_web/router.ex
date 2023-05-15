@@ -20,6 +20,13 @@ defmodule QRClassWeb.Router do
     plug(:accepts, ["json"])
   end
 
+  scope "/api", QRClassWeb do
+    pipe_through :api
+
+    post "/classes", ClassController, :create
+    get "/teachers", TeacherController, :index
+  end
+
   scope "/", QRClassWeb do
     pipe_through([:browser, :require_authenticated_user])
 

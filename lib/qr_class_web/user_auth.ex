@@ -4,6 +4,7 @@ defmodule QRClassWeb.UserAuth do
   import Plug.Conn
   import Phoenix.Controller
 
+  alias QRClass.Accounts.User
   alias QRClass.Accounts
 
   # Make the remember me cookie valid for 60 days.
@@ -225,8 +226,8 @@ defmodule QRClassWeb.UserAuth do
 
   defp signed_in_path(_conn, user) do
     case user.type do
-      unquote(Accounts.teacher()) -> ~p"/teacher"
-      unquote(Accounts.student()) -> ~p"/student"
+      unquote(User.teacher()) -> ~p"/teacher"
+      unquote(User.student()) -> ~p"/student"
     end
   end
 end

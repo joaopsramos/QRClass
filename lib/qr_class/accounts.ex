@@ -8,10 +8,11 @@ defmodule QRClass.Accounts do
 
   alias QRClass.Accounts.{User, UserToken, UserNotifier}
 
-  def teacher, do: :teacher
-  def student, do: :student
+  @teacher User.teacher()
 
-  ## Database getters
+  def list_teachers do
+    Repo.all( from u in User, where: u.type == @teacher)
+  end
 
   @doc """
   Gets a user by email.

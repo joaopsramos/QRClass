@@ -2,12 +2,14 @@ defmodule QRClass.Course.Class do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias QRClass.Accounts.User
+
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "classes" do
     field :cover_img, :string
     field :name, :string
-    field :teacher_id, :binary_id
+    belongs_to :teacher, User
 
     timestamps()
   end
