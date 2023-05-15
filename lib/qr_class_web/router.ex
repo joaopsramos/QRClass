@@ -23,7 +23,9 @@ defmodule QRClassWeb.Router do
   scope "/api", QRClassWeb do
     pipe_through :api
 
+    get "/classes", ClassController, :index
     post "/classes", ClassController, :create
+
     get "/teachers", TeacherController, :index
     get "/students", StudentController, :index
   end

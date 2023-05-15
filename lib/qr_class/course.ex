@@ -18,7 +18,7 @@ defmodule QRClass.Course do
 
   """
   def list_classes do
-    Repo.all(Class)
+    Repo.all(from c in Class, preload: [:teacher, :students])
   end
 
   @doc """
