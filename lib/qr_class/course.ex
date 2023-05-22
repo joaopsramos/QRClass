@@ -5,6 +5,7 @@ defmodule QRClass.Course do
 
   import Ecto.Query, warn: false
 
+  alias QRClass.Course.QRCode
   alias QRClass.Course.Class
   alias QRClass.Course.ClassSession
   alias QRClass.Repo
@@ -21,11 +22,11 @@ defmodule QRClass.Course do
   end
 
   def get_teacher_classes(teacher_id) do
-    Repo.all(from c in Class, where: c.teacher_id == ^teacher_id)
+    Repo.all(from(c in Class, where: c.teacher_id == ^teacher_id))
   end
 
   def list_class_sessions_by_class_id(class_id) do
-    Repo.all(from cs in ClassSession, where: cs.class_id == ^class_id)
+    Repo.all(from(cs in ClassSession, where: cs.class_id == ^class_id))
   end
 
   @doc """
@@ -38,7 +39,7 @@ defmodule QRClass.Course do
 
   """
   def list_classes do
-    Repo.all(from c in Class, preload: [:teacher, :students])
+    Repo.all(from(c in Class, preload: [:teacher, :students]))
   end
 
   @doc """
@@ -125,5 +126,9 @@ defmodule QRClass.Course do
   """
   def change_class(%Class{} = class, attrs \\ %{}) do
     Class.changeset(class, attrs)
+  end
+
+  def change_qr_code(%QRCode{} = qr_code, attrs \\ %{}) do
+    QRCode.changeset(qr_code, attrs)
   end
 end

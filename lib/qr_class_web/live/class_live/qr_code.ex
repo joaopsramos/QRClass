@@ -1,7 +1,7 @@
 defmodule QRClassWeb.ClassLive.QRCode do
   use QRClassWeb, :live_component
 
-  alias QRClass.Repo
+  alias QRClass.Course.QRCode
   alias QRClass.Course
 
   @impl true
@@ -19,7 +19,7 @@ defmodule QRClassWeb.ClassLive.QRCode do
         phx-change="validate"
         phx-submit="save"
       >
-        <.input field={@form[:name]} type="text" label="Name" />
+        <.input field={@form[:expires_at]} type="text" label="Name" />
         <.input field={@form[:cover_img]} type="text" label="Cover img" />
         <:actions>
           <.button phx-disable-with="Saving...">Save Class</.button>
@@ -30,8 +30,8 @@ defmodule QRClassWeb.ClassLive.QRCode do
   end
 
   @impl true
-  def update(%{class: class} = assigns, socket) do
-    changeset = Course.change_class(Repo.preload(class, :students))
+  def update(assigns, socket) do
+    changeset = Course.change_qr_code(%QRCode{})
 
     {:ok,
      socket
