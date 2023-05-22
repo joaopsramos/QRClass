@@ -1,23 +1,37 @@
 <.header>
-  Class <%= @class.id %>
-  <:subtitle>This is a class record from your database.</:subtitle>
-  <:actions>
-    <.link patch={~p"/classes/#{@class}/show/edit"} phx-click={JS.push_focus()}>
-      <.button>Edit class</.button>
-    </.link>
-  </:actions>
+  <%= @class.name %>
 </.header>
 
-<.list>
-  <:item title="Name"><%= @class.name %></:item>
-  <:item title="Cover img"><%= @class.cover_img %></:item>
-</.list>
+<.table id="classes" rows={@class_sessions}>
+  <:col :let={class_session} label="Inicio">
+    <span class="font-normal"><%= format_date(class_session.start_date) %></span>
+  </:col>
+  <:col :let={class_session} label="Fim">
+    <%= format_date(class_session.end_date) %>
+  </:col>
+  <:col :let={class_session} label="Online">
+    <%= if class_session.online, do: "Sim", else: "Não" %>
+  </:col>
+  <:action :let={class_session}>
+    <.link
+      :if={Course.can_generate_qr_code?(class_session)}
+      patch={~p"/classes/#{@class}/show/qr_code"}
+    >
+      Gerar QR Code
+    </.link>
+  </:action>
+</.table>
 
-<.back navigate={~p"/classes"}>Back to classes</.back>
+<.back navigate={~p"/teacher"}>Voltar</.back>
 
-<.modal :if={@live_action == :edit} id="class-modal" show on_cancel={JS.patch(~p"/classes/#{@class}")}>
+<.modal
+  :if={@live_action == :edit}
+  id="class-modal"
+  show
+  on_cancel={JS.patch(~p"/classes/#{@class}")}
+>
   <.live_component
-    module={QRClassWeb.ClassLive.FormComponent}
+    module={QRClassWeb.ClassLive.QRCode}
     id={@class.id}
     title={@page_title}
     action={@live_action}

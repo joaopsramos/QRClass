@@ -1,0 +1,14 @@
+<ul class="flex flex-wrap justify-center">
+  <li
+    :for={class <- @classes}
+    class="mx-4 mb-6 transition ease-in-out duration-200 hover:-translate-y-1 hover:scale-110 hover:text-brand"
+  >
+    <.link navigate={~p"/classes/#{class}"}>
+      <div class="shadow-lg rounded-b-lg">
+        <img src={class.cover_img} alt="Capa" width="300px" class="rounded-t-xl" />
+        <span class="block text-center p-6"><%= class.name %></span>
+      </div>
+    </.link>
+  </li>
+</ul>
+

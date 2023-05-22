@@ -21,21 +21,21 @@ defmodule QRClassWeb.Router do
   end
 
   scope "/api", QRClassWeb do
-    pipe_through :api
+    pipe_through(:api)
 
-    get "/classes", ClassController, :index
-    post "/classes", ClassController, :create
+    get("/classes", ClassController, :index)
+    post("/classes", ClassController, :create)
+    post("/classes/:class_id/sessions", ClassController, :create_class_session)
 
-    get "/teachers", TeacherController, :index
-    get "/students", StudentController, :index
+    get("/teachers", TeacherController, :index)
+    get("/students", StudentController, :index)
   end
 
   scope "/", QRClassWeb do
     pipe_through([:browser, :require_authenticated_user])
 
-    get "/", PageController, :home
-    get "/teacher", PageController, :home
-    get "/student", PageController, :home
+    get("/", PageController, :home)
+    get("/student", PageController, :home)
 
     live_session :require_authenticated_user, on_mount: [@ensure_authenticated] do
       live("/classes", ClassLive.Index, :index)
@@ -43,7 +43,9 @@ defmodule QRClassWeb.Router do
       live("/classes/:id/edit", ClassLive.Index, :edit)
 
       live("/classes/:id", ClassLive.Show, :show)
-      live("/classes/:id/show/edit", ClassLive.Show, :edit)
+      live("/classes/:id/show/qr_code", ClassLive.Show, :edit)
+
+      live("/teacher", TeacherLive.Index, :index)
 
       live("/users/settings", UserSettingsLive, :edit)
       live("/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email)

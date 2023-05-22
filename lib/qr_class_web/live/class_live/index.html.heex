@@ -30,7 +30,12 @@
   </:action>
 </.table>
 
-<.modal :if={@live_action in [:new, :edit]} id="class-modal" show on_cancel={JS.patch(~p"/classes")}>
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="class-modal"
+  show
+  on_cancel={JS.patch(~p"/classes")}
+>
   <.live_component
     module={QRClassWeb.ClassLive.FormComponent}
     id={@class.id || :new}

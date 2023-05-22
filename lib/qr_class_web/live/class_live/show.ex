@@ -11,11 +11,10 @@ defmodule QRClassWeb.ClassLive.Show do
   @impl true
   def handle_params(%{"id" => id}, _, socket) do
     {:noreply,
-     socket
-     |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:class, Course.get_class!(id))}
+     assign(socket,
+       page_title: "Class Sessions",
+       class: Course.get_class!(id),
+       class_sessions: Course.list_class_sessions_by_class_id(id)
+     )}
   end
-
-  defp page_title(:show), do: "Show Class"
-  defp page_title(:edit), do: "Edit Class"
 end

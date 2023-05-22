@@ -4,9 +4,29 @@ defmodule QRClass.Course do
   """
 
   import Ecto.Query, warn: false
-  alias QRClass.Repo
 
   alias QRClass.Course.Class
+  alias QRClass.Course.ClassSession
+  alias QRClass.Repo
+
+  def can_generate_qr_code?(%ClassSession{} = class_session) do
+    # Timex.between?(DateTime.utc_now(), class_session.start_date, class_session.end_date)
+    true
+  end
+
+  def create_class_session(attrs \\ %{}) do
+    %ClassSession{}
+    |> ClassSession.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def get_teacher_classes(teacher_id) do
+    Repo.all(from c in Class, where: c.teacher_id == ^teacher_id)
+  end
+
+  def list_class_sessions_by_class_id(class_id) do
+    Repo.all(from cs in ClassSession, where: cs.class_id == ^class_id)
+  end
 
   @doc """
   Returns the list of classes.

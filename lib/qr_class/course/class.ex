@@ -14,7 +14,10 @@ defmodule QRClass.Course.Class do
     field :student_ids, {:array, :string}, virtual: true, default: []
 
     belongs_to :teacher, User
-    many_to_many :students, User, join_through: "student_classes", join_keys: [class_id: :id, student_id: :id]
+
+    many_to_many :students, User,
+      join_through: "student_classes",
+      join_keys: [class_id: :id, student_id: :id]
 
     timestamps()
   end
