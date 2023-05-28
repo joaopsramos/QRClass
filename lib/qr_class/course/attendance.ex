@@ -2,13 +2,17 @@ defmodule QRClass.Course.Attendance do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias QRClass.Accounts.User
+  alias QRClass.Course.ClassSession
+
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "attendances" do
     field :attended, :boolean, default: false
-    field :class_id, :binary_id
-    field :class_session_id, :binary_id
-    field :student_id, :binary_id
+
+    belongs_to :class, Class
+    belongs_to :class_session, ClassSession
+    belongs_to :student, User
 
     timestamps()
   end
@@ -16,7 +20,7 @@ defmodule QRClass.Course.Attendance do
   @doc false
   def changeset(attendance, attrs) do
     attendance
-    |> cast(attrs, [:attended])
-    |> validate_required([:attended])
+    |> cast(attrs, [:attended, :class_id, :class_session_id, :student_id])
+    |> validate_required([:attended, :class_session_id, :student_id])
   end
 end

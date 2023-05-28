@@ -20,6 +20,15 @@ defmodule QRClassWeb.Router do
     plug(:accepts, ["json"])
   end
 
+  pipeline :qr_code do
+    plug(:accepts, ["html"])
+    plug(:fetch_session)
+    plug(:fetch_live_flash)
+    plug(:put_root_layout, {QRClassWeb.Layouts, :qr_code})
+    plug(:protect_from_forgery)
+    plug(:put_secure_browser_headers)
+  end
+
   scope "/api", QRClassWeb do
     pipe_through(:api)
 
@@ -34,7 +43,6 @@ defmodule QRClassWeb.Router do
   scope "/", QRClassWeb do
     pipe_through([:browser, :require_authenticated_user])
 
-    get("/", PageController, :home)
     get("/student", PageController, :home)
 
     live_session :require_authenticated_user, on_mount: [@ensure_authenticated] do
@@ -57,6 +65,8 @@ defmodule QRClassWeb.Router do
   scope "/", QRClassWeb do
     pipe_through([:browser, :redirect_if_user_is_authenticated])
 
+    get("/", PageController, :home)
+
     live_session :redirect_if_user_is_authenticated, on_mount: [@redirect_if_authenticated] do
       live("/users/register", UserRegistrationLive, :new)
       live("/users/log_in", UserLoginLive, :new)
@@ -65,6 +75,12 @@ defmodule QRClassWeb.Router do
     end
 
     post("/users/log_in", UserSessionController, :create)
+  end
+
+  scope "/", QRClassWeb do
+    pipe_through([:qr_code])
+
+    live("/attendance", AttendanceLive.Index, :index)
   end
 
   scope "/", QRClassWeb do

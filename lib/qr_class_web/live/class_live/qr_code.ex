@@ -39,8 +39,9 @@ defmodule QRClassWeb.ClassLive.QRCode do
   @impl true
   def update(assigns, socket) do
     {:ok, qr_code} =
-      ~p"/appointment?token=#{Base.encode64(assigns.class_session.id)}"
+      ~p"/attendance?token=#{Base.encode64(assigns.class_session.id)}"
       |> url()
+      |> IO.inspect()
       |> QRCode.create()
       |> QRCode.render(:svg, get_svg_settings())
       |> QRCode.to_base64()
