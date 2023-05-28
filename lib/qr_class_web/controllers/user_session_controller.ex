@@ -15,7 +15,7 @@ defmodule QRClassWeb.UserSessionController do
   end
 
   def create(conn, params) do
-    create(conn, params, "Welcome back!")
+    create(conn, params, "Bem-vindo de volta!")
   end
 
   defp create(conn, %{"user" => user_params}, info) do
@@ -28,7 +28,7 @@ defmodule QRClassWeb.UserSessionController do
     else
       # In order to prevent user enumeration attacks, don't disclose whether the email is registered.
       conn
-      |> put_flash(:error, "Invalid email or password")
+      |> put_flash(:error, "E-mail ou senha inválidos")
       |> put_flash(:email, String.slice(email, 0, 160))
       |> redirect(to: ~p"/users/log_in")
     end
@@ -36,7 +36,6 @@ defmodule QRClassWeb.UserSessionController do
 
   def delete(conn, _params) do
     conn
-    |> put_flash(:info, "Logged out successfully.")
     |> UserAuth.log_out_user()
   end
 end

@@ -21,9 +21,9 @@ defmodule QRClassWeb.UserLoginLive do
 
         <:actions>
           <.input field={@form[:remember_me]} type="checkbox" label="Continuar conectado" />
-          <.link href={~p"/users/reset_password"} class="text-sm font-semibold">
-            Esqueceu sua senha?
-          </.link>
+          <!-- <.link href={~p"/users/reset_password"} class="text-sm font-semibold"> -->
+          <!--   Esqueceu sua senha? -->
+          <!-- </.link> -->
         </:actions>
         <:actions>
           <.button phx-disable-with="Signing in..." class="w-full">

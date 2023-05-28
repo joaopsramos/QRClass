@@ -46,10 +46,6 @@ defmodule QRClassWeb.Router do
     get("/student", PageController, :home)
 
     live_session :require_authenticated_user, on_mount: [@ensure_authenticated] do
-      live("/classes", ClassLive.Index, :index)
-      live("/classes/new", ClassLive.Index, :new)
-      live("/classes/:id/edit", ClassLive.Index, :edit)
-
       live("/classes/:id", ClassLive.Show, :show)
       live("/classes/:id/class_session/:class_session_id/qr_code", ClassLive.Show, :edit)
 

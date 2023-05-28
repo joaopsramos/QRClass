@@ -1,4 +1,6 @@
 <ul class="flex flex-wrap justify-center">
+  <h2 :if={Enum.empty?(@classes)} class="text-lg font-semibold">Nenhuma aula registrada ainda</h2>
+
   <li
     :for={class <- @classes}
     class="mx-4 mb-6 transition ease-in-out duration-200 hover:-translate-y-1 hover:scale-110 hover:text-brand"
