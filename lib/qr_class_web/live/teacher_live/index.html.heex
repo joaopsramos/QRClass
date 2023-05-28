@@ -5,10 +5,9 @@
   >
     <.link navigate={~p"/classes/#{class}"}>
       <div class="shadow-lg rounded-b-lg">
-        <img src={class.cover_img} alt="Capa" width="300px" class="rounded-t-xl" />
+        <img src={~p"/images/#{class.cover_img}"} alt="Capa" width="300px" class="rounded-t-xl" />
         <span class="block text-center p-6"><%= class.name %></span>
       </div>
     </.link>
   </li>
 </ul>
-

@@ -43,7 +43,7 @@ defmodule QRClassWeb.Router do
       live("/classes/:id/edit", ClassLive.Index, :edit)
 
       live("/classes/:id", ClassLive.Show, :show)
-      live("/classes/:id/show/qr_code", ClassLive.Show, :edit)
+      live("/classes/:id/class_session/:class_session_id/qr_code", ClassLive.Show, :edit)
 
       live("/teacher", TeacherLive.Index, :index)
 

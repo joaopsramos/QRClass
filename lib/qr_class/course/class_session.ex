@@ -10,6 +10,7 @@ defmodule QRClass.Course.ClassSession do
     field(:start_date, :utc_datetime)
     field(:end_date, :utc_datetime)
     field(:online, :boolean, default: false)
+    field(:qr_code_active, :boolean, default: false)
     belongs_to(:class, Class)
 
     timestamps()
@@ -18,7 +19,7 @@ defmodule QRClass.Course.ClassSession do
   @doc false
   def changeset(class_session, attrs) do
     class_session
-    |> cast(attrs, [:start_date, :end_date, :online, :class_id])
+    |> cast(attrs, [:start_date, :end_date, :online, :class_id, :qr_code_active])
     |> validate_required([:start_date, :end_date, :online, :class_id])
     |> foreign_key_constraint(:class_id)
   end

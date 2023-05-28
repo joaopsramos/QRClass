@@ -5,12 +5,28 @@ defmodule QRClass.Course do
 
   import Ecto.Query, warn: false
 
-  alias QRClass.Course.QRCode
+  alias QRClass.Course
   alias QRClass.Course.Class
   alias QRClass.Course.ClassSession
   alias QRClass.Repo
 
-  def can_generate_qr_code?(%ClassSession{} = class_session) do
+  def active_qr_code(%ClassSession{} = class_session) do
+    if can_active_qr_code?(class_session) do
+      class_session
+      |> ClassSession.changeset(%{qr_code_active: true})
+      |> Repo.update()
+    else
+      {:error, :could_not_activate}
+    end
+  end
+
+  def inactive_qr_code(%ClassSession{} = class_session) do
+    class_session
+    |> ClassSession.changeset(%{qr_code_active: false})
+    |> Repo.update!()
+  end
+
+  def can_active_qr_code?(%ClassSession{} = class_session) do
     # Timex.between?(DateTime.utc_now(), class_session.start_date, class_session.end_date)
     true
   end
@@ -19,6 +35,10 @@ defmodule QRClass.Course do
     %ClassSession{}
     |> ClassSession.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def get_class_session(id) do
+    Repo.get(ClassSession, id)
   end
 
   def get_teacher_classes(teacher_id) do
@@ -128,7 +148,7 @@ defmodule QRClass.Course do
     Class.changeset(class, attrs)
   end
 
-  def change_qr_code(%QRCode{} = qr_code, attrs \\ %{}) do
-    QRCode.changeset(qr_code, attrs)
+  def change_qr_code(%Course.QRCode{} = qr_code, attrs \\ %{}) do
+    Course.QRCode.changeset(qr_code, attrs)
   end
 end

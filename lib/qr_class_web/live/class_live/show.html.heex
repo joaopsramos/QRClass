@@ -14,10 +14,10 @@
   </:col>
   <:action :let={class_session}>
     <.link
-      :if={Course.can_generate_qr_code?(class_session)}
-      patch={~p"/classes/#{@class}/show/qr_code"}
+      :if={Course.can_active_qr_code?(class_session)}
+      patch={~p"/classes/#{@class}/class_session/#{class_session}/qr_code"}
     >
-      Gerar QR Code
+      QR Code
     </.link>
   </:action>
 </.table>
@@ -35,6 +35,7 @@
     id={@class.id}
     action={@live_action}
     class={@class}
+    class_session={@class_session}
     patch={~p"/classes/#{@class}"}
   />
 </.modal>

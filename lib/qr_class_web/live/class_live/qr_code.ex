@@ -1,7 +1,7 @@
 defmodule QRClassWeb.ClassLive.QRCode do
   use QRClassWeb, :live_component
 
-  alias QRClass.Course.QRCode
+  alias QRCode.Render.SvgSettings
   alias QRClass.Course
 
   @impl true
@@ -9,34 +9,55 @@ defmodule QRClassWeb.ClassLive.QRCode do
     ~H"""
     <div>
       <.header>
-        Gerar QR Code
-      </.header>
+        QR Code de presença
+        <div>
+          <%= if @class_session.qr_code_active do %>
+            <button
+              phx-click="inactive-qr-code"
+              phx-target={@myself}
+              class="py-2 px-3 rounded-lg text-sm text-white font-semibold leading-6 mt-4 bg-red-600 hover:bg-red-700"
+            >
+              Desativar
+            </button>
+          <% else %>
+            <button
+              phx-click="active-qr-code"
+              phx-target={@myself}
+              class="py-2 px-3 rounded-lg text-sm text-white font-semibold leading-6 mt-4 bg-green-600 hover:bg-green-700"
+            >
+              Ativar
+            </button>
+          <% end %>
 
-      <.simple_form
-        for={@form}
-        id="class-form"
-        phx-target={@myself}
-        phx-change="validate"
-        phx-submit="save"
-      >
-        <.input field={@form[:expires_at]} type="text" label="Name" />
-        <.input field={@form[:cover_img]} type="text" label="Cover img" />
-        <:actions>
-          <.button phx-disable-with="Saving...">Save Class</.button>
-        </:actions>
-      </.simple_form>
+          <img class="mt-8 mx-auto" src={"data:image/svg+xml; base64, #{@qr_code}"} alt="" />
+        </div>
+      </.header>
     </div>
     """
   end
 
   @impl true
   def update(assigns, socket) do
-    changeset = Course.change_qr_code(%QRCode{})
+    {:ok, qr_code} =
+      ~p"/appointment?token=#{Base.encode64(assigns.class_session.id)}"
+      |> url()
+      |> QRCode.create()
+      |> QRCode.render(:svg, get_svg_settings())
+      |> QRCode.to_base64()
 
-    {:ok,
-     socket
-     |> assign(assigns)
-     |> assign_form(changeset)}
+    {:ok, socket |> assign(assigns) |> assign(qr_code: qr_code)}
+  end
+
+  def handle_event("active-qr-code", _params, socket) do
+    {:ok, class_session} = Course.active_qr_code(socket.assigns.class_session)
+
+    {:noreply, assign(socket, :class_session, class_session)}
+  end
+
+  def handle_event("inactive-qr-code", _params, socket) do
+    class_session = Course.inactive_qr_code(socket.assigns.class_session)
+
+    {:noreply, assign(socket, :class_session, class_session)}
   end
 
   @impl true
@@ -85,6 +106,10 @@ defmodule QRClassWeb.ClassLive.QRCode do
 
   defp assign_form(socket, %Ecto.Changeset{} = changeset) do
     assign(socket, :form, to_form(changeset))
+  end
+
+  defp get_svg_settings do
+    %SvgSettings{qrcode_color: "#279cf9", image: {"priv/static/images/anima-logo.png", 150}}
   end
 
   defp notify_parent(msg), do: send(self(), {__MODULE__, msg})
