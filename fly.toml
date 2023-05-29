@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for spring-frog-9964 on 2023-05-28T20:38:49-03:00
+# fly.toml app configuration file generated for qr-class on 2023-05-29T00:02:30-03:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = "spring-frog-9964"
+app = "qr-class"
 primary_region = "gru"
 kill_signal = "SIGTERM"
 
@@ -11,7 +11,7 @@ kill_signal = "SIGTERM"
   release_command = "/app/bin/migrate"
 
 [env]
-  PHX_HOST = "spring-frog-9964.fly.dev"
+  PHX_HOST = "qr-class.fly.dev"
   PORT = "8080"
 
 [http_service]
