@@ -7,6 +7,8 @@
 # General application configuration
 import Config
 
+config :argon2_elixir, t_cost: 4, m_cost: 8
+
 config :qr_class,
   namespace: QRClass,
   ecto_repos: [QRClass.Repo]
