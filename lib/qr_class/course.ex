@@ -69,7 +69,6 @@ defmodule QRClass.Course do
         for student <- students do
           create_attendance(student, class_session)
         end
-        |> IO.inspect()
 
       if Enum.all?(attendances, &(elem(&1, 0) == :ok)) do
         {:ok, attendances}

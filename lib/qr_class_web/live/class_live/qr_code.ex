@@ -110,7 +110,10 @@ defmodule QRClassWeb.ClassLive.QRCode do
   end
 
   defp get_svg_settings do
-    %SvgSettings{qrcode_color: "#279cf9", image: {"priv/static/images/anima-logo.png", 150}}
+    %SvgSettings{
+      qrcode_color: "#279cf9",
+      image: {:code.priv_dir(:qr_class) |> Path.join("/static/images/anima-logo.png"), 150}
+    }
   end
 
   defp notify_parent(msg), do: send(self(), {__MODULE__, msg})
