@@ -4,6 +4,7 @@ defmodule QRClass.Course.Attendance do
 
   alias QRClass.Accounts.User
   alias QRClass.Course.ClassSession
+  alias QRClass.Course.Class
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id

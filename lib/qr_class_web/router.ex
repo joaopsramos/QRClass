@@ -50,6 +50,7 @@ defmodule QRClassWeb.Router do
       live("/classes/:id/class_session/:class_session_id/qr_code", ClassLive.Show, :edit)
 
       live("/teacher", TeacherLive.Index, :index)
+      live("/class_sessions/:id", ClassSessionLive.Index, :index)
 
       live("/users/settings", UserSettingsLive, :edit)
       live("/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email)

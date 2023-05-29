@@ -73,13 +73,13 @@ defmodule QRClassWeb.AttendanceLive.Index do
   def render(assigns) do
     ~H"""
     <div class="max-w-md mx-auto flex flex-col items-center">
-      <div :if={true}>
+      <div :if={@registered}>
         <h2 class="text-center font-semibold text-2xl front-bold mt-24">
           Tudo certo! Você já pode fechar essa aba
         </h2>
       </div>
 
-      <div :if={@registered}>
+      <div :if={not @registered}>
         <h2 class="text-2xl font-bold mt-24">Registrar presença</h2>
 
         <.form

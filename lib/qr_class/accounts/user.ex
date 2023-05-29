@@ -4,7 +4,6 @@ defmodule QRClass.Accounts.User do
   import Ecto.Changeset
 
   alias QRClass.Course.Class
-  alias QRClass.Course.ClassSession
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id

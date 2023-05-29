@@ -2,7 +2,20 @@
   <%= @class.name %>
 </.header>
 
-<.table id="classes" rows={@class_sessions}>
+<div :if={@class_sessions != []} class="text-center text-lg mt-6">
+  Aulas
+</div>
+
+<div :if={@class_sessions == []} class="text-center text-lg mt-6">
+  Nenhuma aula registrada ainda
+</div>
+
+<.table
+  :if={@class_sessions != []}
+  id="classes"
+  rows={@class_sessions}
+  row_click={fn class_session -> JS.navigate(~p"/class_sessions/#{class_session}") end}
+>
   <:col :let={class_session} label="Inicio">
     <span class="font-normal"><%= format_date(class_session.start_date) %></span>
   </:col>

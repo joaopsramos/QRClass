@@ -29,6 +29,12 @@ defmodule QRClass.Course do
     |> Repo.update()
   end
 
+  def remove_presence(%Attendance{} = attendance) do
+    attendance
+    |> Attendance.changeset(%{attended: false})
+    |> Repo.update()
+  end
+
   def get_attendance(student_id, class_session_id) do
     Repo.get_by(Attendance, student_id: student_id, class_session_id: class_session_id)
   end
@@ -50,8 +56,7 @@ defmodule QRClass.Course do
   end
 
   def can_active_qr_code?(%ClassSession{} = class_session) do
-    # Timex.between?(DateTime.utc_now(), class_session.start_date, class_session.end_date)
-    true
+    Timex.between?(DateTime.utc_now(), class_session.start_date, class_session.end_date)
   end
 
   def create_class_session(attrs \\ %{}) do
@@ -91,6 +96,11 @@ defmodule QRClass.Course do
 
   def get_class_session(id) do
     Repo.get(ClassSession, id)
+  end
+
+  def get_class_session(id, preload) do
+    from(cs in ClassSession, preload: ^preload)
+    |> Repo.get(id)
   end
 
   def get_teacher_classes(teacher_id) do

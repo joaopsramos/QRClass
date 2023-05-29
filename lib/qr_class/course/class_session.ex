@@ -3,6 +3,7 @@ defmodule QRClass.Course.ClassSession do
   import Ecto.Changeset
 
   alias QRClass.Course.Class
+  alias QRClass.Course.Attendance
 
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
@@ -12,6 +13,7 @@ defmodule QRClass.Course.ClassSession do
     field(:online, :boolean, default: false)
     field(:qr_code_active, :boolean, default: false)
     belongs_to(:class, Class)
+    has_many(:attendances, Attendance)
 
     timestamps()
   end
