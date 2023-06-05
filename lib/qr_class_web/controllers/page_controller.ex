@@ -5,7 +5,7 @@ defmodule QRClassWeb.PageController do
     redirect(conn, to: ~p"/users/log_in")
   end
 
-  def student(conn, _params) do
-    render(conn, :home)
+  def account_created(conn, _params) do
+    render(conn, :account_created)
   end
 end

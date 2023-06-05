@@ -56,7 +56,9 @@ defmodule QRClass.Course do
   end
 
   def can_active_qr_code?(%ClassSession{} = class_session) do
-    Timex.between?(DateTime.utc_now(), class_session.start_date, class_session.end_date)
+    now = Timex.shift(Timex.now(), hours: -3)
+
+    Timex.between?(now, class_session.start_date, class_session.end_date)
   end
 
   def create_class_session(attrs \\ %{}) do

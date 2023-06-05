@@ -43,8 +43,6 @@ defmodule QRClassWeb.Router do
   scope "/", QRClassWeb do
     pipe_through([:browser, :require_authenticated_user])
 
-    get("/student", PageController, :student)
-
     live_session :require_authenticated_user, on_mount: [@ensure_authenticated] do
       live("/classes/:id", ClassLive.Show, :show)
       live("/classes/:id/class_session/:class_session_id/qr_code", ClassLive.Show, :edit)
@@ -63,6 +61,7 @@ defmodule QRClassWeb.Router do
     pipe_through([:browser, :redirect_if_user_is_authenticated])
 
     get("/", PageController, :home)
+    get("/student/account_created", PageController, :account_created)
 
     live_session :redirect_if_user_is_authenticated, on_mount: [@redirect_if_authenticated] do
       live("/users/register", UserRegistrationLive, :new)
