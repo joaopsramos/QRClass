@@ -11,11 +11,6 @@
   >
     <.link navigate={~p"/classes/#{class}"}>
       <div class="shadow-lg rounded-b-lg">
-        <img
-          src={~p"/images/#{class.cover_img || "no-image.jpg"}"}
-          alt="Capa"
-          class="h-48 w-72 object-cover rounded-t-xl"
-        />
         <span class="block text-center p-6"><%= class.name %></span>
       </div>
     </.link>

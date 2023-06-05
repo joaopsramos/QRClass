@@ -30,7 +30,6 @@ defmodule QRClassWeb.ClassJSON do
     %{
       id: class.id,
       name: class.name,
-      cover_img: class.cover_img,
       teacher: TeacherJSON.data(class.teacher),
       students: Enum.map(class.students, &StudentJSON.data(&1))
     }

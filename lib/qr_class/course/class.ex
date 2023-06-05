@@ -9,15 +9,15 @@ defmodule QRClass.Course.Class do
   @primary_key {:id, :binary_id, autogenerate: true}
   @foreign_key_type :binary_id
   schema "classes" do
-    field :cover_img, :string
-    field :name, :string
-    field :student_ids, {:array, :string}, virtual: true, default: []
+    field(:name, :string)
+    field(:student_ids, {:array, :string}, virtual: true, default: [])
 
-    belongs_to :teacher, User
+    belongs_to(:teacher, User)
 
-    many_to_many :students, User,
+    many_to_many(:students, User,
       join_through: "student_classes",
       join_keys: [class_id: :id, student_id: :id]
+    )
 
     timestamps()
   end
@@ -25,7 +25,7 @@ defmodule QRClass.Course.Class do
   @doc false
   def changeset(class, attrs) do
     class
-    |> cast(attrs, [:name, :cover_img, :student_ids, :teacher_id])
+    |> cast(attrs, [:name, :student_ids, :teacher_id])
     |> validate_required([:name, :teacher_id])
     |> put_students()
   end
