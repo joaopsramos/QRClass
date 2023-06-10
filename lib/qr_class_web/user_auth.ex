@@ -227,7 +227,6 @@ defmodule QRClassWeb.UserAuth do
   defp signed_in_path(_conn, user) do
     case user.type do
       unquote(User.teacher()) -> ~p"/teacher"
-      unquote(User.student()) -> ~p"/student"
     end
   end
 end

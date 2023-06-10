@@ -2,6 +2,7 @@ defmodule QRClassWeb.Router do
   use QRClassWeb, :router
 
   import QRClassWeb.UserAuth
+  alias QRClassWeb.StoreIP
 
   @ensure_authenticated {QRClassWeb.UserAuth, :ensure_authenticated}
   @redirect_if_authenticated {QRClassWeb.UserAuth, :redirect_if_user_is_authenticated}
@@ -27,6 +28,7 @@ defmodule QRClassWeb.Router do
     plug(:put_root_layout, {QRClassWeb.Layouts, :qr_code})
     plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
+    plug(StoreIP)
   end
 
   scope "/api", QRClassWeb do

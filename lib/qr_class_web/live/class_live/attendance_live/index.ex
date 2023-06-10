@@ -1,10 +1,12 @@
 defmodule QRClassWeb.AttendanceLive.Index do
-  alias QRClass.Course
-  alias QRClass.Accounts
   use QRClassWeb, :live_view
 
-  def mount(params, _, socket) do
-    {:ok, assign(socket, token: params["token"], registered: false)}
+  alias QRClass.IPCache
+  alias QRClass.Course
+  alias QRClass.Accounts
+
+  def mount(params, session, socket) do
+    {:ok, assign(socket, ip: session["ip"], token: params["token"], registered: false)}
   end
 
   def handle_event("register", %{"attendance" => %{"email" => email}}, socket) do
@@ -13,7 +15,10 @@ defmodule QRClassWeb.AttendanceLive.Index do
            {:ok, class_session} <- validate_class_session(class_session_id),
            {:ok, user} <- validate_user(email),
            {:ok, attendance} <- validate_attendance(user, class_session),
+           :ok <- validate_ip(socket.assigns.ip, class_session),
            {:ok, _} <- register_presence(attendance) do
+        IPCache.put(class_session.id, socket.assigns.ip)
+
         socket
         |> assign(registered: true)
         |> put_flash(:info, "Presença registrada com sucesso")
@@ -36,8 +41,7 @@ defmodule QRClassWeb.AttendanceLive.Index do
       if class_session.qr_code_active do
         {:ok, class_session}
       else
-        {:error,
-         "Não é mais possivel registrar presença nesta aula, se você acha que isso é um problema, comunique seu professor"}
+        {:error, "Não é mais possivel registrar presença nesta aula, o QR Code usado já expirou"}
       end
     else
       {:error, "Aula não encontrada, comunique seu professor"}
@@ -60,6 +64,14 @@ defmodule QRClassWeb.AttendanceLive.Index do
 
       attendance ->
         {:ok, attendance}
+    end
+  end
+
+  defp validate_ip(ip, class_session) do
+    if IPCache.exists?(class_session.id, ip) do
+      {:error, "Não foi possível registrar sua presenaça"}
+    else
+      :ok
     end
   end
 
