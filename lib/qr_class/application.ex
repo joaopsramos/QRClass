@@ -17,7 +17,8 @@ defmodule QRClass.Application do
       # Start Finch
       {Finch, name: QRClass.Finch},
       # Start the Endpoint (http/https)
-      QRClassWeb.Endpoint
+      QRClassWeb.Endpoint,
+      QRClass.IPCache
       # Start a worker by calling: QRClass.Worker.start_link(arg)
       # {QRClass.Worker, arg}
     ]
