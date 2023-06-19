@@ -41,7 +41,7 @@ defmodule QRClassWeb.AttendanceLive.Index do
       if class_session.qr_code_active do
         {:ok, class_session}
       else
-        {:error, "Não é mais possivel registrar presença nesta aula, o QR Code usado já expirou"}
+        {:error, "O QR Code lido ainda não foi ativado ou já expirou"}
       end
     else
       {:error, "Aula não encontrada, comunique seu professor"}
