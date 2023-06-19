@@ -82,6 +82,7 @@ defmodule QRClass.Course do
     |> Repo.transaction()
     |> case do
       {:ok, %{class_session: class_session}} -> {:ok, class_session}
+      {:error, :class_session, changeset, _} -> {:error, changeset}
       error -> error
     end
   end

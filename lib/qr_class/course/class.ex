@@ -28,13 +28,22 @@ defmodule QRClass.Course.Class do
     |> cast(attrs, [:name, :student_ids, :teacher_id])
     |> validate_required([:name, :teacher_id])
     |> put_students()
+    |> foreign_key_constraint(:teacher_id)
   end
 
   defp put_students(%Changeset{valid?: false} = changeset), do: changeset
 
   defp put_students(changeset) do
     student_ids = get_field(changeset, :student_ids)
+    students = Accounts.get_users_by_ids(student_ids)
+    invalid_ids = student_ids -- Enum.map(students, & &1.id)
 
-    put_assoc(changeset, :students, Accounts.get_users_by_ids(student_ids))
+    if invalid_ids == [] do
+      put_assoc(changeset, :students, students)
+    else
+      add_error(changeset, :students, "students not found: [%{student_ids}]",
+        student_ids: Enum.join(invalid_ids, ",")
+      )
+    end
   end
 end
